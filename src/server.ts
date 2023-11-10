@@ -1,7 +1,3 @@
-import { config } from "dotenv";
-
-config();
-
 import express, { Application } from "express";
 import { register, Gauge, Summary } from "prom-client";
 import { Stats, TechnitiumClient } from "./lib/technitium-client";
@@ -13,64 +9,68 @@ const client: TechnitiumClient = new TechnitiumClient(
 
 const app: Application = express();
 
+const TECHNITIUM_PREFIX = "technitium";
+const NAME = "name";
+
 const totalQueries: Gauge = new Gauge({
-  name: "technitium_total_queries",
-  help: "technitium",
-  labelNames: ["a", "b"],
+  name: `${TECHNITIUM_PREFIX}_total_queries`,
+  help: TECHNITIUM_PREFIX,
 });
 
-totalQueries.set(10);
-
 const totalNoError: Gauge = new Gauge({
-  name: "technitium_total_no_error",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_no_error`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalServerFailure: Gauge = new Gauge({
-  name: "technitium_total_server_failure",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_server_failure`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalRefused: Gauge = new Gauge({
-  name: "technitium_total_refused",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_refused`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalAuthoritative: Gauge = new Gauge({
-  name: "technitium_total_authoritative",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_authoritative`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalRecursive: Gauge = new Gauge({
-  name: "technitium_total_recursive",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_recursive`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalCached: Gauge = new Gauge({
-  name: "technitium_total_cached",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_cached`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalBlocked: Gauge = new Gauge({
-  name: "technitium_total_blocked",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_blocked`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const totalClients: Gauge = new Gauge({
-  name: "technitium_total_clients",
-  help: "technitium",
+  name: `${TECHNITIUM_PREFIX}_total_clients`,
+  help: TECHNITIUM_PREFIX,
 });
 
 const topDomains: Gauge = new Gauge({
-  name: "technitium_top_domains",
-  help: "technitium",
-  labelNames: ["name"],
+  name: `${TECHNITIUM_PREFIX}_top_domains`,
+  help: TECHNITIUM_PREFIX,
+  labelNames: [NAME],
 });
 
 const topClients: Gauge = new Gauge({
-  name: "technitium_top_clients",
-  help: "technitium",
-  labelNames: ["name"],
+  name: `${TECHNITIUM_PREFIX}_top_clients`,
+  help: TECHNITIUM_PREFIX,
+  labelNames: [NAME],
+});
+
+app.get("/", (req, res) => {
+  res.send("ok");
 });
 
 app.get("/metrics", async (_req, res) => {
